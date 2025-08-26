@@ -1,0 +1,77 @@
+{
+  "common": {
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar", 
+    "edit": "Editar",
+    "add": "Agregar",
+    "remove": "Quitar",
+    "enable": "Habilitar",
+    "disable": "Deshabilitar",
+    "preview": "Vista Previa",
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito"
+  },
+  "card": {
+    "title": "Timer 24H",
+    "no_schedules": "No hay horarios configurados",
+    "add_schedule": "Agregar Horario",
+    "schedule_disabled": "Horario Deshabilitado",
+    "current_slot": "Franja Horaria Actual",
+    "next_change": "Próximo Cambio",
+    "conditions_met": "Condiciones Cumplidas",
+    "conditions_not_met": "Condiciones No Cumplidas"
+  },
+  "schedule": {
+    "id": "ID del Horario",
+    "target_entity": "Entidad Objetivo",
+    "enabled": "Habilitado",
+    "disabled": "Deshabilitado",
+    "timezone": "Zona Horaria",
+    "slots": "Franjas Horarias",
+    "conditions": "Condiciones",
+    "no_conditions": "Sin condiciones",
+    "active_slots": "Franjas Activas",
+    "total_slots": "Total de Franjas"
+  },
+  "editor": {
+    "schedule_settings": "Configuración del Horario",
+    "time_slots": "Franjas Horarias",
+    "conditions": "Condiciones",
+    "preview": "Vista Previa",
+    "drag_to_select": "Haga clic y arrastre para seleccionar franjas horarias",
+    "slot_active": "Franja Activa",
+    "slot_inactive": "Franja Inactiva",
+    "add_condition": "Agregar Condición",
+    "entity_id": "ID de Entidad",
+    "expected_state": "Estado Esperado",
+    "policy": "Política",
+    "policy_skip": "Omitir - No cambiar estado cuando la condición no se cumple",
+    "policy_force_off": "Forzar Apagado - Apagar cuando la condición no se cumple",
+    "policy_defer": "Diferir - Esperar hasta que se cumpla la condición"
+  },
+  "time": {
+    "hour": "Hora",
+    "minute": "Minuto",
+    "am": "AM",
+    "pm": "PM",
+    "24h_format": "24h",
+    "slot": "Franja {index}",
+    "time_range": "{start} - {end}"
+  },
+  "state": {
+    "on": "Encendido",
+    "off": "Apagado",
+    "unknown": "Desconocido",
+    "unavailable": "No Disponible"
+  },
+  "messages": {
+    "schedule_saved": "Horario guardado exitosamente",
+    "schedule_deleted": "Horario eliminado exitosamente",
+    "invalid_schedule_id": "ID de horario inválido",
+    "entity_not_found": "Entidad no encontrada",
+    "websocket_error": "Error de conexión WebSocket",
+    "service_call_failed": "Llamada de servicio falló"
+  }
+}

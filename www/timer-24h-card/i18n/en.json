@@ -1,0 +1,77 @@
+{
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel", 
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "remove": "Remove",
+    "enable": "Enable",
+    "disable": "Disable",
+    "preview": "Preview",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success"
+  },
+  "card": {
+    "title": "Timer 24H",
+    "no_schedules": "No schedules configured",
+    "add_schedule": "Add Schedule",
+    "schedule_disabled": "Schedule Disabled",
+    "current_slot": "Current Time Slot",
+    "next_change": "Next Change",
+    "conditions_met": "Conditions Met",
+    "conditions_not_met": "Conditions Not Met"
+  },
+  "schedule": {
+    "id": "Schedule ID",
+    "target_entity": "Target Entity",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "timezone": "Timezone",
+    "slots": "Time Slots",
+    "conditions": "Conditions",
+    "no_conditions": "No conditions",
+    "active_slots": "Active Slots",
+    "total_slots": "Total Slots"
+  },
+  "editor": {
+    "schedule_settings": "Schedule Settings",
+    "time_slots": "Time Slots",
+    "conditions": "Conditions",
+    "preview": "Preview",
+    "drag_to_select": "Click and drag to select time slots",
+    "slot_active": "Slot Active",
+    "slot_inactive": "Slot Inactive",
+    "add_condition": "Add Condition",
+    "entity_id": "Entity ID",
+    "expected_state": "Expected State",
+    "policy": "Policy",
+    "policy_skip": "Skip - Don't change state when condition not met",
+    "policy_force_off": "Force Off - Turn off when condition not met", 
+    "policy_defer": "Defer - Wait until condition is met"
+  },
+  "time": {
+    "hour": "Hour",
+    "minute": "Minute",
+    "am": "AM",
+    "pm": "PM",
+    "24h_format": "24h",
+    "slot": "Slot {index}",
+    "time_range": "{start} - {end}"
+  },
+  "state": {
+    "on": "On",
+    "off": "Off",
+    "unknown": "Unknown",
+    "unavailable": "Unavailable"
+  },
+  "messages": {
+    "schedule_saved": "Schedule saved successfully",
+    "schedule_deleted": "Schedule deleted successfully", 
+    "invalid_schedule_id": "Invalid schedule ID",
+    "entity_not_found": "Entity not found",
+    "websocket_error": "WebSocket connection error",
+    "service_call_failed": "Service call failed"
+  }
+}

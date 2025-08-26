@@ -1,0 +1,69 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Configuration Timer 24H",
+        "description": "Configurer l'intégration Timer 24H avec planification automatique",
+        "data": {
+          "name": "Nom de l'Intégration"
+        }
+      },
+      "schedule": {
+        "title": "Horaire Initial",
+        "description": "Créer votre premier horaire pour {name}",
+        "data": {
+          "schedule_id": "ID de l'Horaire",
+          "target_entity_id": "Entité Cible",
+          "timezone": "Fuseau Horaire"
+        }
+      }
+    },
+    "error": {
+      "schedule_id": "L'ID de l'horaire doit contenir uniquement des lettres, des chiffres, des tirets et des traits de soulignement",
+      "target_entity_id": "L'entité sélectionnée n'existe pas"
+    },
+    "abort": {
+      "already_configured": "L'intégration Timer 24H est déjà configurée avec ce nom"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Options Timer 24H",
+        "description": "Configurer les paramètres par défaut pour Timer 24H",
+        "data": {
+          "default_timezone": "Fuseau Horaire par Défaut",
+          "default_condition_policy": "Politique de Condition par Défaut",
+          "enable_debug_logging": "Activer la Journalisation de Débogage",
+          "reconcile_on_startup": "Réconcilier les Horaires au Démarrage"
+        }
+      }
+    }
+  },
+  "services": {
+    "set_schedule": {
+      "name": "Définir l'Horaire",
+      "description": "Créer ou mettre à jour un horaire de 24 heures"
+    },
+    "enable": {
+      "name": "Activer l'Horaire",
+      "description": "Activer un horaire"
+    },
+    "disable": {
+      "name": "Désactiver l'Horaire",
+      "description": "Désactiver un horaire"
+    },
+    "set_conditions": {
+      "name": "Définir les Conditions",
+      "description": "Définir les conditions pour un horaire"
+    },
+    "remove": {
+      "name": "Supprimer l'Horaire",
+      "description": "Supprimer complètement un horaire"
+    },
+    "reconcile": {
+      "name": "Réconcilier",
+      "description": "Déclencher manuellement la réconciliation"
+    }
+  }
+}

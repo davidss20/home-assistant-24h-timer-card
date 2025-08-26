@@ -1,0 +1,13 @@
+{
+  "domain": "timer24h",
+  "name": "Timer 24H",
+  "version": "1.0.0",
+  "documentation": "https://github.com/home-assistant-community/timer-24h",
+  "issue_tracker": "https://github.com/home-assistant-community/timer-24h/issues",
+  "dependencies": [],
+  "codeowners": ["@timer24h"],
+  "requirements": [],
+  "config_flow": true,
+  "iot_class": "local_push",
+  "integration_type": "service"
+}

@@ -1,0 +1,36 @@
+{
+  "name": "timer-24h-card",
+  "version": "1.0.0",
+  "description": "A 24-hour timer card for Home Assistant with server-side integration",
+  "main": "timer-24h-card.js",
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite build --watch",
+    "preview": "vite preview",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint src --ext .ts",
+    "format": "prettier --write src/**/*.ts"
+  },
+  "keywords": [
+    "home-assistant",
+    "lovelace",
+    "custom-card", 
+    "timer",
+    "automation",
+    "server-side"
+  ],
+  "author": "Timer 24H Integration",
+  "license": "MIT",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
+    "prettier": "^3.0.0",
+    "typescript": "^5.0.0",
+    "vite": "^5.0.0"
+  },
+  "dependencies": {
+    "lit": "^3.0.0"
+  }
+}

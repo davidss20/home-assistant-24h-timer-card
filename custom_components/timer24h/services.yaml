@@ -1,0 +1,97 @@
+set_schedule:
+  name: Set Schedule
+  description: Create or update a 24-hour schedule with 48 half-hour slots.
+  fields:
+    schedule_id:
+      name: Schedule ID
+      description: Unique identifier for the schedule.
+      required: true
+      selector:
+        text:
+    target_entity_id:
+      name: Target Entity
+      description: Entity to control based on the schedule.
+      required: true
+      selector:
+        entity:
+          domain: [light, switch, fan, climate, media_player, cover, input_boolean]
+    slots:
+      name: Schedule Slots
+      description: Array of 48 boolean values representing half-hour slots (00:00, 00:30, 01:00, ..., 23:30).
+      required: true
+      selector:
+        object:
+    enabled:
+      name: Enabled
+      description: Whether the schedule is enabled.
+      required: false
+      default: true
+      selector:
+        boolean:
+    timezone:
+      name: Timezone
+      description: Timezone for the schedule (optional, uses Home Assistant timezone if not provided).
+      required: false
+      selector:
+        text:
+
+enable:
+  name: Enable Schedule
+  description: Enable a schedule.
+  fields:
+    schedule_id:
+      name: Schedule ID
+      description: Unique identifier of the schedule to enable.
+      required: true
+      selector:
+        text:
+
+disable:
+  name: Disable Schedule
+  description: Disable a schedule.
+  fields:
+    schedule_id:
+      name: Schedule ID
+      description: Unique identifier of the schedule to disable.
+      required: true
+      selector:
+        text:
+
+set_conditions:
+  name: Set Conditions
+  description: Set conditions that must be met for the schedule to activate.
+  fields:
+    schedule_id:
+      name: Schedule ID
+      description: Unique identifier of the schedule.
+      required: true
+      selector:
+        text:
+    conditions:
+      name: Conditions
+      description: Array of condition objects with entity_id, expected state, and policy.
+      required: true
+      selector:
+        object:
+
+remove:
+  name: Remove Schedule
+  description: Remove a schedule completely.
+  fields:
+    schedule_id:
+      name: Schedule ID
+      description: Unique identifier of the schedule to remove.
+      required: true
+      selector:
+        text:
+
+reconcile:
+  name: Reconcile
+  description: Manually trigger reconciliation of schedules to current state.
+  fields:
+    schedule_id:
+      name: Schedule ID
+      description: Specific schedule to reconcile (optional, reconciles all if not provided).
+      required: false
+      selector:
+        text:

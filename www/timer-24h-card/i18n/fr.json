@@ -1,0 +1,77 @@
+{
+  "common": {
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "add": "Ajouter",
+    "remove": "Retirer",
+    "enable": "Activer",
+    "disable": "Désactiver",
+    "preview": "Aperçu",
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès"
+  },
+  "card": {
+    "title": "Timer 24H",
+    "no_schedules": "Aucun horaire configuré",
+    "add_schedule": "Ajouter un Horaire",
+    "schedule_disabled": "Horaire Désactivé",
+    "current_slot": "Créneau Horaire Actuel",
+    "next_change": "Prochain Changement",
+    "conditions_met": "Conditions Remplies",
+    "conditions_not_met": "Conditions Non Remplies"
+  },
+  "schedule": {
+    "id": "ID de l'Horaire",
+    "target_entity": "Entité Cible",
+    "enabled": "Activé",
+    "disabled": "Désactivé",
+    "timezone": "Fuseau Horaire",
+    "slots": "Créneaux Horaires",
+    "conditions": "Conditions",
+    "no_conditions": "Aucune condition",
+    "active_slots": "Créneaux Actifs",
+    "total_slots": "Total des Créneaux"
+  },
+  "editor": {
+    "schedule_settings": "Paramètres de l'Horaire",
+    "time_slots": "Créneaux Horaires",
+    "conditions": "Conditions",
+    "preview": "Aperçu",
+    "drag_to_select": "Cliquez et faites glisser pour sélectionner les créneaux horaires",
+    "slot_active": "Créneau Actif",
+    "slot_inactive": "Créneau Inactif",
+    "add_condition": "Ajouter une Condition",
+    "entity_id": "ID d'Entité",
+    "expected_state": "État Attendu",
+    "policy": "Politique",
+    "policy_skip": "Ignorer - Ne pas changer l'état quand la condition n'est pas remplie",
+    "policy_force_off": "Forcer l'Arrêt - Éteindre quand la condition n'est pas remplie",
+    "policy_defer": "Différer - Attendre que la condition soit remplie"
+  },
+  "time": {
+    "hour": "Heure",
+    "minute": "Minute",
+    "am": "AM",
+    "pm": "PM",
+    "24h_format": "24h",
+    "slot": "Créneau {index}",
+    "time_range": "{start} - {end}"
+  },
+  "state": {
+    "on": "Allumé",
+    "off": "Éteint",
+    "unknown": "Inconnu",
+    "unavailable": "Non Disponible"
+  },
+  "messages": {
+    "schedule_saved": "Horaire enregistré avec succès",
+    "schedule_deleted": "Horaire supprimé avec succès",
+    "invalid_schedule_id": "ID d'horaire invalide",
+    "entity_not_found": "Entité non trouvée",
+    "websocket_error": "Erreur de connexion WebSocket",
+    "service_call_failed": "Appel de service échoué"
+  }
+}

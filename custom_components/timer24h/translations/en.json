@@ -1,0 +1,69 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Timer 24H Setup",
+        "description": "Set up Timer 24H integration with automatic scheduling",
+        "data": {
+          "name": "Integration Name"
+        }
+      },
+      "schedule": {
+        "title": "Initial Schedule",
+        "description": "Create your first schedule for {name}",
+        "data": {
+          "schedule_id": "Schedule ID",
+          "target_entity_id": "Target Entity",
+          "timezone": "Timezone"
+        }
+      }
+    },
+    "error": {
+      "schedule_id": "Schedule ID must contain only letters, numbers, hyphens, and underscores",
+      "target_entity_id": "Selected entity does not exist"
+    },
+    "abort": {
+      "already_configured": "Timer 24H integration is already configured with this name"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Timer 24H Options",
+        "description": "Configure default settings for Timer 24H",
+        "data": {
+          "default_timezone": "Default Timezone",
+          "default_condition_policy": "Default Condition Policy",
+          "enable_debug_logging": "Enable Debug Logging",
+          "reconcile_on_startup": "Reconcile Schedules on Startup"
+        }
+      }
+    }
+  },
+  "services": {
+    "set_schedule": {
+      "name": "Set Schedule",
+      "description": "Create or update a 24-hour schedule"
+    },
+    "enable": {
+      "name": "Enable Schedule",
+      "description": "Enable a schedule"
+    },
+    "disable": {
+      "name": "Disable Schedule", 
+      "description": "Disable a schedule"
+    },
+    "set_conditions": {
+      "name": "Set Conditions",
+      "description": "Set conditions for a schedule"
+    },
+    "remove": {
+      "name": "Remove Schedule",
+      "description": "Remove a schedule completely"
+    },
+    "reconcile": {
+      "name": "Reconcile",
+      "description": "Manually trigger reconciliation"
+    }
+  }
+}

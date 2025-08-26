@@ -1,0 +1,69 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Configuración Timer 24H",
+        "description": "Configurar la integración Timer 24H con programación automática",
+        "data": {
+          "name": "Nombre de Integración"
+        }
+      },
+      "schedule": {
+        "title": "Horario Inicial",
+        "description": "Crear tu primer horario para {name}",
+        "data": {
+          "schedule_id": "ID del Horario",
+          "target_entity_id": "Entidad Objetivo",
+          "timezone": "Zona Horaria"
+        }
+      }
+    },
+    "error": {
+      "schedule_id": "El ID del horario debe contener solo letras, números, guiones y guiones bajos",
+      "target_entity_id": "La entidad seleccionada no existe"
+    },
+    "abort": {
+      "already_configured": "La integración Timer 24H ya está configurada con este nombre"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opciones Timer 24H",
+        "description": "Configurar ajustes predeterminados para Timer 24H",
+        "data": {
+          "default_timezone": "Zona Horaria Predeterminada",
+          "default_condition_policy": "Política de Condición Predeterminada",
+          "enable_debug_logging": "Habilitar Registro de Depuración",
+          "reconcile_on_startup": "Reconciliar Horarios al Inicio"
+        }
+      }
+    }
+  },
+  "services": {
+    "set_schedule": {
+      "name": "Establecer Horario",
+      "description": "Crear o actualizar un horario de 24 horas"
+    },
+    "enable": {
+      "name": "Habilitar Horario",
+      "description": "Habilitar un horario"
+    },
+    "disable": {
+      "name": "Deshabilitar Horario",
+      "description": "Deshabilitar un horario"
+    },
+    "set_conditions": {
+      "name": "Establecer Condiciones",
+      "description": "Establecer condiciones para un horario"
+    },
+    "remove": {
+      "name": "Eliminar Horario",
+      "description": "Eliminar completamente un horario"
+    },
+    "reconcile": {
+      "name": "Reconciliar",
+      "description": "Activar manualmente la reconciliación"
+    }
+  }
+}
