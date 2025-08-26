@@ -84,7 +84,10 @@ class Timer24HCard extends LitElement {
     super.connectedCallback();
     this.startUpdateLoop();
     this.setupAutoSync();
-    this.createAutomationIfNeeded();
+    // Delay automation creation to ensure hass object is ready
+    setTimeout(() => {
+      this.createAutomationIfNeeded();
+    }, 2000);
   }
 
   startUpdateLoop() {
@@ -800,19 +803,34 @@ class Timer24HCard extends LitElement {
 
   // Automation management functions
   async createAutomationIfNeeded() {
-    if (!this.hass || !this.config?.title) {
+    console.log('🔄 Timer Card: Starting automation creation process...');
+    
+    if (!this.hass) {
+      console.warn('❌ Timer Card: No hass object available');
+      return;
+    }
+    
+    if (!this.config?.title) {
+      console.warn('❌ Timer Card: No config title available');
       return;
     }
 
     try {
+      console.log('🔍 Timer Card: Checking if automation exists...');
       const automationExists = await this.checkAutomationExists();
+      console.log(`🔍 Timer Card: Automation exists: ${automationExists}`);
+      
       if (!automationExists) {
-        await this.createAutomation();
+        console.log('🚀 Timer Card: Creating new automation and script...');
         await this.createControlScript();
+        await this.createAutomation();
         console.log('✅ Timer Card: Automation created successfully');
+      } else {
+        console.log('ℹ️ Timer Card: Automation already exists, skipping creation');
       }
     } catch (error) {
-      console.warn('Timer Card: Failed to create automation:', error);
+      console.error('❌ Timer Card: Failed to create automation:', error);
+      console.error('❌ Timer Card: Error details:', error.message, error.stack);
     }
   }
 
@@ -821,8 +839,23 @@ class Timer24HCard extends LitElement {
 
     try {
       const automationId = `timer_24h_${this.config.title.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase()}`;
-      const automations = await this.hass.callWS({ type: 'config/automation/list' });
-      return automations.some(automation => automation.id === automationId);
+      console.log(`🔍 Timer Card: Looking for automation: ${automationId}`);
+      
+      // Try different methods to check for automation
+      try {
+        const automations = await this.hass.callWS({ type: 'config/automation/list' });
+        console.log(`🔍 Timer Card: Found ${automations.length} automations`);
+        const exists = automations.some(automation => automation.id === automationId);
+        console.log(`🔍 Timer Card: Automation ${automationId} exists: ${exists}`);
+        return exists;
+      } catch (wsError) {
+        console.warn('Timer Card: WS automation list failed, trying states:', wsError);
+        // Fallback: check if automation entity exists in states
+        const automationEntity = `automation.${automationId}`;
+        const exists = !!this.hass.states[automationEntity];
+        console.log(`🔍 Timer Card: Automation entity ${automationEntity} exists in states: ${exists}`);
+        return exists;
+      }
     } catch (error) {
       console.warn('Timer Card: Error checking automation existence:', error);
       return false;
@@ -835,8 +868,10 @@ class Timer24HCard extends LitElement {
     const automationId = `timer_24h_${this.config.title.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase()}`;
     const scriptId = `timer_24h_control_${this.config.title.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase()}`;
     
+    console.log(`🚀 Timer Card: Creating automation: ${automationId}`);
+    console.log(`🚀 Timer Card: Script to call: script.${scriptId}`);
+    
     const automationConfig = {
-      id: automationId,
       alias: `Timer 24H ${this.config.title}`,
       description: `אוטומציה עבור טיימר 24 שעות - ${this.config.title}`,
       mode: 'single',
@@ -854,21 +889,44 @@ class Timer24HCard extends LitElement {
             entity_id: `script.${scriptId}`
           }
         }
-      ],
-      tags: ['Timer 24H Card', 'Auto Generated', this.config.title],
-      trace: {
-        stored_traces: 5
-      }
+      ]
     };
 
     try {
-      await this.hass.callWS({
-        type: 'config/automation/create',
-        config: automationConfig
-      });
-      console.log(`✅ Timer Card: Automation created: ${automationId}`);
+      // Try different API methods
+      try {
+        // Method 1: Try the config/automation/create API
+        const result = await this.hass.callWS({
+          type: 'config/automation/create',
+          config: automationConfig
+        });
+        console.log(`✅ Timer Card: Automation created via config API: ${automationId}`, result);
+        return;
+      } catch (configError) {
+        console.warn('Timer Card: Config API failed, trying service call:', configError);
+        
+        // Method 2: Try using automation.reload service with YAML
+        try {
+          // First, try to call automation service directly
+          await this.hass.callService('automation', 'reload');
+          console.log('🔄 Timer Card: Automation reload called');
+          
+          // Try to create via persistent notification for manual creation
+          const yamlConfig = this.generateAutomationYAML(automationId, automationConfig);
+          await this.hass.callService('persistent_notification', 'create', {
+            notification_id: `timer_24h_automation_${automationId}`,
+            title: 'Timer 24H Card - Automation YAML',
+            message: `Please add this automation to your automations.yaml:\n\n${yamlConfig}`
+          });
+          console.log('📝 Timer Card: Automation YAML sent via notification');
+          return;
+        } catch (serviceError) {
+          console.error('Timer Card: Service call also failed:', serviceError);
+          throw serviceError;
+        }
+      }
     } catch (error) {
-      console.error('Timer Card: Failed to create automation:', error);
+      console.error('Timer Card: All automation creation methods failed:', error);
       throw error;
     }
   }
@@ -878,6 +936,9 @@ class Timer24HCard extends LitElement {
 
     const scriptId = `timer_24h_control_${this.config.title.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase()}`;
     const storageEntityId = this.config.storage_entity_id;
+    
+    console.log(`🚀 Timer Card: Creating script: ${scriptId}`);
+    console.log(`🚀 Timer Card: Storage entity: ${storageEntityId}`);
     
     // Build sensor condition template
     let sensorCondition = 'true';
@@ -971,15 +1032,99 @@ class Timer24HCard extends LitElement {
     };
 
     try {
-      await this.hass.callWS({
-        type: 'config/script/create',
-        config: scriptConfig
-      });
-      console.log(`✅ Timer Card: Control script created: ${scriptId}`);
+      // Try different methods to create script
+      try {
+        const result = await this.hass.callWS({
+          type: 'config/script/create',
+          config: scriptConfig
+        });
+        console.log(`✅ Timer Card: Script created via config API: ${scriptId}`, result);
+        return;
+      } catch (configError) {
+        console.warn('Timer Card: Script config API failed, trying notification:', configError);
+        
+        // Fallback: Create YAML for manual addition
+        const yamlConfig = this.generateScriptYAML(scriptId, scriptConfig);
+        await this.hass.callService('persistent_notification', 'create', {
+          notification_id: `timer_24h_script_${scriptId}`,
+          title: 'Timer 24H Card - Script YAML',
+          message: `Please add this script to your scripts.yaml:\n\n${yamlConfig}`
+        });
+        console.log('📝 Timer Card: Script YAML sent via notification');
+        return;
+      }
     } catch (error) {
-      console.error('Timer Card: Failed to create control script:', error);
+      console.error('Timer Card: Failed to create script:', error);
       throw error;
     }
+  }
+
+  generateAutomationYAML(automationId, config) {
+    return `# Timer 24H Card Automation
+- id: ${automationId}
+  alias: "${config.alias}"
+  description: "${config.description}"
+  mode: ${config.mode}
+  trigger:
+    - platform: time_pattern
+      minutes: "/30"
+  condition: []
+  action:
+    - service: script.turn_on
+      target:
+        entity_id: ${config.action[0].target.entity_id}`;
+  }
+
+  generateScriptYAML(scriptId, config) {
+    const yamlLines = [`# Timer 24H Card Script`];
+    yamlLines.push(`${scriptId}:`);
+    yamlLines.push(`  alias: "${config.alias}"`);
+    yamlLines.push(`  description: "${config.description}"`);
+    yamlLines.push(`  mode: ${config.mode}`);
+    yamlLines.push(`  sequence:`);
+    
+    config.sequence.forEach((step, index) => {
+      if (step.variables) {
+        yamlLines.push(`    - variables:`);
+        Object.entries(step.variables).forEach(([key, value]) => {
+          yamlLines.push(`        ${key}: "${value}"`);
+        });
+      } else if (step.condition) {
+        yamlLines.push(`    - condition: ${step.condition}`);
+        yamlLines.push(`      value_template: "${step.value_template}"`);
+      } else if (step.choose) {
+        yamlLines.push(`    - choose:`);
+        yamlLines.push(`        - conditions:`);
+        yamlLines.push(`            - condition: template`);
+        yamlLines.push(`              value_template: "${step.choose[0].conditions[0].value_template}"`);
+        yamlLines.push(`          sequence:`);
+        step.choose[0].sequence.forEach(action => {
+          yamlLines.push(`            - service: ${action.service}`);
+          yamlLines.push(`              target:`);
+          yamlLines.push(`                entity_id: ${action.target.entity_id}`);
+          if (action.data && Object.keys(action.data).length > 0) {
+            yamlLines.push(`              data:`);
+            Object.entries(action.data).forEach(([key, value]) => {
+              yamlLines.push(`                ${key}: ${value}`);
+            });
+          }
+        });
+        yamlLines.push(`      default:`);
+        step.default.forEach(action => {
+          yamlLines.push(`        - service: ${action.service}`);
+          yamlLines.push(`          target:`);
+          yamlLines.push(`            entity_id: ${action.target.entity_id}`);
+          if (action.data && Object.keys(action.data).length > 0) {
+            yamlLines.push(`          data:`);
+            Object.entries(action.data).forEach(([key, value]) => {
+              yamlLines.push(`            ${key}: ${value}`);
+            });
+          }
+        });
+      }
+    });
+    
+    return yamlLines.join('\n');
   }
 
   getServiceForEntity(entityId, turnOn) {
