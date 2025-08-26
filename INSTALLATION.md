@@ -1,67 +1,68 @@
-# 🛠️ הוראות התקנה מפורטות - Timer 24H Card
+````md
+# 🛠️ Detailed Installation Instructions — Timer 24H Card
 
-## 📥 התקנה ידנית (מומלצת לפתרון בעיות)
+## 📥 Manual Installation (recommended for troubleshooting)
 
-### שלב 1: הורדת הקבצים
-הורד את הקבצים הבאים:
+### Step 1: Download the files
+Download the following files:
 - `timer-24h-card.js`
 - `timer-24h-card-editor.js`
 
-### שלב 2: העלאת הקבצים ל-Home Assistant
-1. צור תיקייה: `config/www/timer-24h-card/`
-2. העלה את שני הקבצים לתיקייה זו
+### Step 2: Upload the files to Home Assistant
+1. Create a folder: `config/www/timer-24h-card/`
+2. Upload both files into this folder
 
-### שלב 3: הוספת משאב ל-Lovelace
-1. עבור ל: **הגדרות → לוחות בקרה → משאבים**
-2. לחץ על **הוסף משאב**
-3. הוסף:
+### Step 3: Add a Lovelace resource
+1. Go to **Settings → Dashboards → Resources**
+2. Click **Add Resource**
+3. Add:
    - URL: `/local/timer-24h-card/timer-24h-card.js`
-   - סוג: JavaScript Module
+   - Type: JavaScript Module
 
-### שלב 4: אתחול Home Assistant
-אתחל את Home Assistant
+### Step 4: Restart Home Assistant
+Restart Home Assistant.
 
-### שלב 5: בדיקה
-1. בדוק שהקבצים נגישים בכתובות:
+### Step 5: Verify
+1. Make sure the files are accessible at:
    - `http://YOUR-HA-IP:8123/local/timer-24h-card/timer-24h-card.js`
    - `http://YOUR-HA-IP:8123/local/timer-24h-card/timer-24h-card-editor.js`
 
-2. אם אתה מקבל שגיאת 404, בדוק:
-   - שהקבצים נמצאים ב-`config/www/timer-24h-card/`
-   - שיש לך הרשאות קריאה לקבצים
-   - שה-URL נכון (שים לב ל-`/local/` ולא `/www/`)
+2. If you get a 404 error, check:
+   - The files are in `config/www/timer-24h-card/`
+   - You have read permissions on the files
+   - The URL is correct (note: use `/local/`, not `/www/`)
 
-## 🔧 פתרון בעיות נפוצות
+## 🔧 Common Troubleshooting
 
-### שגיאה: "Failed to load resource: 404"
-**פתרון:**
-1. בדוק שהקבצים נמצאים ב-`config/www/timer-24h-card/`
-2. וודא שה-URL הוא: `/local/timer-24h-card/timer-24h-card.js`
-3. אתחל את Home Assistant
-4. נקה cache של הדפדפן (Ctrl+F5)
+### Error: “Failed to load resource: 404”
+**Fix:**
+1. Confirm the files are in `config/www/timer-24h-card/`
+2. Ensure the resource URL is `/local/timer-24h-card/timer-24h-card.js`
+3. Restart Home Assistant
+4. Clear your browser cache (Ctrl+F5)
 
-### שגיאה: "this.timeSlots.find is not a function"
-**פתרון:**
-הקובץ החדש כבר מכיל תיקון לבעיה זו. וודא שאתה משתמש בגרסה החדשה.
+### Error: “this.timeSlots.find is not a function”
+**Fix:**
+The new file already includes a fix for this issue. Make sure you’re using the latest version.
 
-### שגיאה: "Custom element doesn't exist"
-**פתרון:**
-1. וודא שהמשאב נוסף נכון ל-Lovelace
-2. אתחל את Home Assistant
-3. נקה cache של הדפדפן
+### Error: “Custom element doesn’t exist”
+**Fix:**
+1. Verify the Lovelace resource was added correctly
+2. Restart Home Assistant
+3. Clear your browser cache
 
-## 📋 הוספת כרטיס לוח הבקרה
+## 📋 Add the Card to a Dashboard
 
-### דרך הממשק הגרפי (מומלצת)
-1. עבור למצב עריכה בלוח הבקרה
-2. לחץ **הוסף כרטיס**
-3. חפש **Timer 24H Card**
-4. השתמש בעורך הגרפי להגדרה
+### Via the UI (recommended)
+1. Enter Edit mode on your dashboard
+2. Click **Add Card**
+3. Search for **Timer 24H Card**
+4. Use the visual editor to configure
 
-### דרך YAML
+### Via YAML
 ```yaml
 type: custom:timer-24h-card
-title: "טיימר תאורה"
+title: "Lighting Timer"
 home_sensors:
   - person.john_doe
   - binary_sensor.home_occupied
@@ -72,20 +73,21 @@ entities:
 save_state: true
 ```
 
-## ✨ תכונות חדשות
+## ✨ New Features
 
-### 💾 שמירה ברמת השרת
-- הנתונים נשמרים ב-Home Assistant (לא בדפדפן)
-- סינכרון אוטומטי בין כל המכשירים
-- ללא צורך ביצירת helpers נוספים
+### 💾 Server-Side Persistence
+- Data is stored in Home Assistant (not in the browser)
+- Automatic synchronization across all devices
+- No additional helpers required
 
-### 🔄 מיגרציה אוטומטית
-- אם יש נתונים ישנים ב-localStorage
-- הם יועברו אוטומטית ל-Home Assistant
-- ללא איבוד מידע
+### 🔄 Automatic Migration
+- If old data exists in `localStorage`
+- It will be automatically migrated to Home Assistant
+- No data loss
 
-## 🆘 קבלת עזרה
-אם אתה נתקל בבעיות:
-1. בדוק את הקונסול (F12) לשגיאות
-2. פתח issue ב-GitHub עם פרטי השגיאה
-3. כלול את גרסת Home Assistant שלך
+## 🆘 Getting Help
+If you run into issues:
+1. Check the browser console (F12) for errors
+2. Open a GitHub issue with the error details
+3. Include your Home Assistant version
+````
