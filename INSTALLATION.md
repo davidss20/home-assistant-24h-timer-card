@@ -1,6 +1,12 @@
 ````md
 # 🛠️ Detailed Installation Instructions — Timer 24H Card
 
+<div align="center">
+
+![Timer 24H Card Icon](https://github.com/davidss20/home-assistant-timer-24h-card/raw/main/icon.svg)
+
+</div>
+
 ## 📥 Manual Installation (recommended for troubleshooting)
 
 ### Step 1: Download the files

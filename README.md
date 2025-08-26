@@ -2,6 +2,9 @@
 
 <div align="center">
 
+![Timer 24H Card Icon](https://github.com/davidss20/home-assistant-timer-24h-card/raw/main/icon.svg)
+
+
 [![HACS Badge](https://img.shields.io/badge/HACS-Custom-orange.svg?style=for-the-badge)](https://github.com/hacs/integration)
 [![GitHub Release](https://img.shields.io/github/release/davidss20/timer-24h-card.svg?style=for-the-badge&color=blue)](https://github.com/davidss20/home-assistant-timer-24h-card/releases)
 [![License](https://img.shields.io/github/license/davidss20/timer-24h-card.svg?style=for-the-badge&color=green)](LICENSE)
