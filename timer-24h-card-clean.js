@@ -84,6 +84,7 @@ class Timer24HCard extends LitElement {
     super.connectedCallback();
     this.startUpdateLoop();
     this.setupAutoSync();
+    this.createAutomationIfNeeded();
   }
 
   startUpdateLoop() {
@@ -130,6 +131,7 @@ class Timer24HCard extends LitElement {
     
     // Cleanup helper entities when card is removed
     this._scheduleCleanup();
+    this.cleanupAutomation();
   }
 
   _scheduleCleanup() {
@@ -793,6 +795,254 @@ class Timer24HCard extends LitElement {
         enumerable: true,
         configurable: true
       });
+    }
+  }
+
+  // Automation management functions
+  async createAutomationIfNeeded() {
+    if (!this.hass || !this.config?.title) {
+      return;
+    }
+
+    try {
+      const automationExists = await this.checkAutomationExists();
+      if (!automationExists) {
+        await this.createAutomation();
+        await this.createControlScript();
+        console.log('✅ Timer Card: Automation created successfully');
+      }
+    } catch (error) {
+      console.warn('Timer Card: Failed to create automation:', error);
+    }
+  }
+
+  async checkAutomationExists() {
+    if (!this.hass) return false;
+
+    try {
+      const automationId = `timer_24h_${this.config.title.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase()}`;
+      const automations = await this.hass.callWS({ type: 'config/automation/list' });
+      return automations.some(automation => automation.id === automationId);
+    } catch (error) {
+      console.warn('Timer Card: Error checking automation existence:', error);
+      return false;
+    }
+  }
+
+  async createAutomation() {
+    if (!this.hass) return;
+
+    const automationId = `timer_24h_${this.config.title.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase()}`;
+    const scriptId = `timer_24h_control_${this.config.title.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase()}`;
+    
+    const automationConfig = {
+      id: automationId,
+      alias: `Timer 24H ${this.config.title}`,
+      description: `אוטומציה עבור טיימר 24 שעות - ${this.config.title}`,
+      mode: 'single',
+      trigger: [
+        {
+          platform: 'time_pattern',
+          minutes: '/30'
+        }
+      ],
+      condition: [],
+      action: [
+        {
+          service: 'script.turn_on',
+          target: {
+            entity_id: `script.${scriptId}`
+          }
+        }
+      ],
+      tags: ['Timer 24H Card', 'Auto Generated', this.config.title],
+      trace: {
+        stored_traces: 5
+      }
+    };
+
+    try {
+      await this.hass.callWS({
+        type: 'config/automation/create',
+        config: automationConfig
+      });
+      console.log(`✅ Timer Card: Automation created: ${automationId}`);
+    } catch (error) {
+      console.error('Timer Card: Failed to create automation:', error);
+      throw error;
+    }
+  }
+
+  async createControlScript() {
+    if (!this.hass) return;
+
+    const scriptId = `timer_24h_control_${this.config.title.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase()}`;
+    const storageEntityId = this.config.storage_entity_id;
+    
+    // Build sensor condition template
+    let sensorCondition = 'true';
+    if (this.config.home_sensors && this.config.home_sensors.length > 0) {
+      const sensorChecks = this.config.home_sensors.map(sensor => 
+        `states('${sensor}') in ['on', 'home', 'true', 'active', 'detected']`
+      );
+      sensorCondition = this.config.home_logic === 'AND' ? 
+        sensorChecks.join(' and ') : 
+        sensorChecks.join(' or ');
+    }
+
+    // Build entity control sequences
+    const turnOnSequence = [];
+    const turnOffSequence = [];
+    
+    if (this.config.entities && this.config.entities.length > 0) {
+      this.config.entities.forEach(entityId => {
+        const turnOnService = this.getServiceForEntity(entityId, true);
+        const turnOffService = this.getServiceForEntity(entityId, false);
+        const turnOnData = this.getServiceDataForEntity(entityId, true);
+        const turnOffData = this.getServiceDataForEntity(entityId, false);
+
+        if (turnOnService) {
+          turnOnSequence.push({
+            service: turnOnService,
+            target: { entity_id: entityId },
+            ...(Object.keys(turnOnData).length > 0 ? { data: turnOnData } : {})
+          });
+        }
+
+        if (turnOffService) {
+          turnOffSequence.push({
+            service: turnOffService,
+            target: { entity_id: entityId },
+            ...(Object.keys(turnOffData).length > 0 ? { data: turnOffData } : {})
+          });
+        }
+      });
+    }
+    
+    const scriptConfig = {
+      alias: `Timer 24H Control - ${this.config.title}`,
+      description: `סקריפט בקרה עבור טיימר 24 שעות - ${this.config.title}`,
+      mode: 'single',
+      sequence: [
+        {
+          variables: {
+            timer_data: `{{ states('${storageEntityId}') if states('${storageEntityId}') not in ['unknown', 'unavailable'] else '' }}`,
+            current_hour: '{{ now().hour }}',
+            current_minute: '{{ now().minute }}'
+          }
+        },
+        {
+          condition: 'template',
+          value_template: `{{ timer_data != '' }}`
+        },
+        {
+          variables: {
+            parsed_data: `{{ timer_data | from_json if timer_data != '' else {} }}`,
+            time_slots: `{{ parsed_data.timeSlots if 'timeSlots' in parsed_data else [] }}`
+          }
+        },
+        {
+          variables: {
+            current_slot_index: `{{ ((current_hour | int) * 2 + (0 if current_minute | int < 30 else 1)) | int }}`,
+            is_time_active: `{{ time_slots[current_slot_index].active if current_slot_index < (time_slots | length) else false }}`
+          }
+        },
+        {
+          variables: {
+            is_sensors_active: `{{ ${sensorCondition} }}`,
+            should_be_active: `{{ is_time_active and is_sensors_active }}`
+          }
+        },
+        {
+          choose: [
+            {
+              conditions: [
+                {
+                  condition: 'template',
+                  value_template: '{{ should_be_active }}'
+                }
+              ],
+              sequence: turnOnSequence
+            }
+          ],
+          default: turnOffSequence
+        }
+      ]
+    };
+
+    try {
+      await this.hass.callWS({
+        type: 'config/script/create',
+        config: scriptConfig
+      });
+      console.log(`✅ Timer Card: Control script created: ${scriptId}`);
+    } catch (error) {
+      console.error('Timer Card: Failed to create control script:', error);
+      throw error;
+    }
+  }
+
+  getServiceForEntity(entityId, turnOn) {
+    const domain = entityId.split('.')[0];
+    
+    switch (domain) {
+      case 'switch':
+      case 'input_boolean':
+      case 'light':
+        return turnOn ? `${domain}.turn_on` : `${domain}.turn_off`;
+      case 'climate':
+        return 'climate.set_hvac_mode';
+      case 'script':
+        return turnOn ? 'script.turn_on' : null;
+      default:
+        return turnOn ? `${domain}.turn_on` : `${domain}.turn_off`;
+    }
+  }
+
+  getServiceDataForEntity(entityId, turnOn) {
+    const domain = entityId.split('.')[0];
+    
+    switch (domain) {
+      case 'climate':
+        return { hvac_mode: turnOn ? 'heat' : 'off' };
+      default:
+        return {};
+    }
+  }
+
+  async cleanupAutomation() {
+    if (!this.hass || !this.config?.title) {
+      return;
+    }
+
+    try {
+      const automationId = `timer_24h_${this.config.title.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase()}`;
+      const scriptId = `timer_24h_control_${this.config.title.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase()}`;
+
+      // Schedule cleanup after a delay to avoid issues during page refresh
+      setTimeout(async () => {
+        if (!this.isConnected) {
+          try {
+            // Delete automation
+            await this.hass.callWS({
+              type: 'config/automation/delete',
+              config_id: automationId
+            });
+            console.log(`✅ Timer Card: Automation deleted: ${automationId}`);
+            
+            // Delete script
+            await this.hass.callWS({
+              type: 'config/script/delete',
+              entity_id: `script.${scriptId}`
+            });
+            console.log(`✅ Timer Card: Script deleted: ${scriptId}`);
+          } catch (error) {
+            console.warn('Timer Card: Error during automation cleanup:', error);
+          }
+        }
+      }, 5000); // Wait 5 seconds to ensure card is really being removed
+    } catch (error) {
+      console.warn('Timer Card: Error scheduling automation cleanup:', error);
     }
   }
 }
