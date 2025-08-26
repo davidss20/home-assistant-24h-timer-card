@@ -36,7 +36,7 @@ A custom Lovelace card for Home Assistant that provides a 24-hour circular timer
 ## 📦 Installation
 
 ### Via HACS (Recommended)
-1. Add custom repository: `https://github.com/davidss20/home-assistant-timer-24h-card`
+1. Add custom repository: `https://github.com/davidss20/home-assistant-24h-timer-card`
 2. Choose your update channel (Stable/Beta)
 3. Install and restart Home Assistant
 
@@ -70,6 +70,6 @@ save_state: true
 
 ## 🆘 Support
 
-- **Issues**: [GitHub Issues](https://github.com/davidss20/home-assistant-timer-24h-card/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/davidss20/home-assistant-timer-24h-card/discussions)
-- **Documentation**: [Full Guide](https://github.com/davidss20/home-assistant-timer-24h-card/blob/main/README.md)
+- **Issues**: [GitHub Issues](https://github.com/davidss20/home-assistant-24h-timer-card/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/davidss20/home-assistant-24h-timer-card/discussions)
+- **Documentation**: [Full Guide](https://github.com/davidss20/home-assistant-24h-timer-card/blob/main/README.md)

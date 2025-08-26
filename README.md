@@ -2,13 +2,13 @@
 
 <div align="center">
 
-![Timer 24H Card Icon](https://github.com/davidss20/home-assistant-timer-24h-card/raw/main/icon.svg)
+![Timer 24H Card Icon](https://github.com/davidss20/home-assistant-24h-timer-card/raw/main/icon.svg)
 
 
 [![HACS Badge](https://img.shields.io/badge/HACS-Custom-orange.svg?style=for-the-badge)](https://github.com/hacs/integration)
-[![GitHub Release](https://img.shields.io/github/release/davidss20/timer-24h-card.svg?style=for-the-badge&color=blue)](https://github.com/davidss20/home-assistant-timer-24h-card/releases)
-[![License](https://img.shields.io/github/license/davidss20/timer-24h-card.svg?style=for-the-badge&color=green)](LICENSE)
-[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg?style=for-the-badge)](https://github.com/davidss20/home-assistant-timer-24h-card/graphs/commit-activity)
+[![GitHub Release](https://img.shields.io/github/release/davidss20/home-assistant-24h-timer-card.svg?style=for-the-badge&color=blue)](https://github.com/davidss20/home-assistant-24h-timer-card/releases)
+[![License](https://img.shields.io/github/license/davidss20/home-assistant-24h-timer-card.svg?style=for-the-badge&color=green)](LICENSE)
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg?style=for-the-badge)](https://github.com/davidss20/home-assistant-24h-timer-card/graphs/commit-activity)
 
 </div>
 
@@ -16,7 +16,7 @@ A custom card for Home Assistant that allows you to set a daily schedule with au
 
 <div align="center">
 
-![Timer 24H Card Preview](https://github.com/davidss20/home-assistant-timer-24h-card/raw/main/images/preview.jpg)
+![Timer 24H Card Preview](https://github.com/davidss20/home-assistant-24h-timer-card/raw/main/images/preview.jpg)
 
 *24-hour circular timer with automatic entity control and home presence detection*
 
@@ -47,7 +47,7 @@ A custom card for Home Assistant that allows you to set a daily schedule with au
 1. Open HACS in Home Assistant
 2. Go to "Frontend" 
 3. Click "+" and choose "Add custom repository"
-4. Add the link: `https://github.com/davidss20/home-assistant-timer-24h-card`
+4. Add the link: `https://github.com/davidss20/home-assistant-24h-timer-card`
 5. Choose category: "Lovelace"
 6. **Choose Channel**:
    - **Stable**: Install normally (default)

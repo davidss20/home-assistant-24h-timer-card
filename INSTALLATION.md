@@ -3,7 +3,7 @@
 
 <div align="center">
 
-![Timer 24H Card Icon](https://github.com/davidss20/home-assistant-timer-24h-card/raw/main/icon.svg)
+![Timer 24H Card Icon](https://github.com/davidss20/home-assistant-24h-timer-card/raw/main/icon.svg)
 
 </div>
 
